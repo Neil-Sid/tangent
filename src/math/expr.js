@@ -1,4 +1,7 @@
-import { parse, derivative, simplify } from 'mathjs'
+import { create, parseDependencies, derivativeDependencies } from 'mathjs'
+
+// Only the parser and the derivative, not all of math.js: a smaller bundle and less work at startup.
+const { parse, derivative } = create({ parseDependencies, derivativeDependencies })
 
 const ALIASES = { ln: 'log', arcsin: 'asin', arccos: 'acos', arctan: 'atan', arcsec: 'asec', arccsc: 'acsc', arccot: 'acot' }
 
@@ -145,7 +148,7 @@ function wrap(node, vars) {
 // Symbolic derivative; null if math.js can't differentiate it (floor, min, ...).
 export function diff(e, v) {
   try {
-    const d = simplify(derivative(e.node, v))
+    const d = derivative(e.node, v, { simplify: false })
     return wrap(d, e.vars)
   } catch {
     return null

@@ -170,6 +170,22 @@ button, input { font: inherit; color: inherit; letter-spacing: inherit; }
 .view3d .label3d.axis { font-weight: 600; color: var(--ink-2); font-style: italic; font-family: var(--font-display); font-size: 15px; }
 .view3d .hint { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: var(--muted); pointer-events: none; }
 
+/* shown until the shared WebGL renderer is ready; the spinner only animates transform, so it keeps turning even while the page is busy */
+.view3d > canvas { opacity: 0; transition: opacity .35s ease; }
+.view3d.ready > canvas { opacity: 1; }
+.loading3d {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 10px;
+  font-size: 13px; color: var(--muted); pointer-events: none;
+  transition: opacity .25s ease;
+}
+.view3d.ready .loading3d { opacity: 0; }
+.loading3d i {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 2px solid var(--line); border-top-color: var(--ink-2);
+  animation: spin .8s linear infinite; will-change: transform;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
 /* ——— fields ——— */
 
 .field { display: grid; gap: 8px; }

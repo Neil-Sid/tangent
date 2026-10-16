@@ -21,3 +21,8 @@ desktop.ini
 
 # screenshots from tools/shot.mjs (README images live in docs/)
 /*.png
+
+# local profiling tools
+tools/gpu-bench.html
+tools/gpu-bench.mjs
+tools/perf.mjs

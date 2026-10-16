@@ -28,11 +28,11 @@ export class Plot2D {
     host.querySelector('.plot-reset').onclick = () => this.setView({ ...this.home })
     this.caption(caption)
 
-    this.resizeObs = new ResizeObserver(() => this.resize())
+    // sized by the observer's first callback; measuring here would force a layout of the whole page
+    this.resizeObs = new ResizeObserver(([entry]) => this.resize(entry.contentRect))
     this.resizeObs.observe(host)
     this.offTheme = onTheme(() => this.invalidate())
     this.bindPointer()
-    this.resize()
   }
 
   destroy() { this.resizeObs.disconnect(); this.offTheme() }
@@ -43,19 +43,19 @@ export class Plot2D {
       `<span><i style="--c:${color}" class="${dashed ? 'dashed' : ''}"></i>${katexInline(tex)}</span>`).join('')
   }
 
-  resize() {
-    const r = this.host.getBoundingClientRect()
-    if (!r.width || !r.height) return
+  resize({ width, height }) {
+    if (!width || !height) return
     const dpr = devicePixelRatio || 1
-    this.w = r.width; this.h = r.height
-    this.canvas.width = Math.round(r.width * dpr)
-    this.canvas.height = Math.round(r.height * dpr)
+    this.w = width; this.h = height
+    this.canvas.width = Math.round(width * dpr)
+    this.canvas.height = Math.round(height * dpr)
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     if (this.equal) this.fixAspect()
     this.invalidate()
   }
 
   fixAspect() {
+    if (!this.w) return
     const v = this.view, cy = (v.y0 + v.y1) / 2
     const half = (v.x1 - v.x0) * this.h / this.w / 2
     v.y0 = cy - half; v.y1 = cy + half
