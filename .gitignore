@@ -1,0 +1,23 @@
+# dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# logs
+*.log
+npm-debug.log*
+
+# local environment and secrets
+.env
+.env.*
+*.local
+
+# editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# screenshots from tools/shot.mjs (README images live in docs/)
+/*.png
